@@ -11,5 +11,4 @@ sealed class NoteAction {
      data class addNote(val note: Note) : NoteAction()
      data class deleteNote(val note: Note) : NoteAction()
 
-
 }

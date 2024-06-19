@@ -3,6 +3,7 @@ package data
 import domain.model.Note
 import io.realm.kotlin.Realm
 import io.realm.kotlin.RealmConfiguration
+import kotlinx.coroutines.flow.Flow
 
 
 //
@@ -10,7 +11,7 @@ import io.realm.kotlin.RealmConfiguration
 // Copyright (c) 2024 CFA. All rights reserved.
 //
 
-class NotesDb {
+class NotesDb : NotesRepository {
 
     private var realm: Realm? = null
 
@@ -28,5 +29,21 @@ class NotesDb {
         }
 
 
+    }
+
+    override fun getNotes(): Flow<List<Note>> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getNoteById(id: Int): Note? {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun insertNote(note: Note) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun deleteNote(note: Note) {
+        TODO("Not yet implemented")
     }
 }
