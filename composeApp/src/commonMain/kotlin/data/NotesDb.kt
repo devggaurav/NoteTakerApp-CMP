@@ -1,9 +1,13 @@
 package data
 
 import domain.model.Note
+import domain.model.RequestState
 import io.realm.kotlin.Realm
 import io.realm.kotlin.RealmConfiguration
+import io.realm.kotlin.ext.query
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
 
 
 //
@@ -14,6 +18,10 @@ import kotlinx.coroutines.flow.Flow
 class NotesDb : NotesRepository {
 
     private var realm: Realm? = null
+
+    init {
+        configureDb()
+    }
 
 
     fun configureDb() {
@@ -31,19 +39,35 @@ class NotesDb : NotesRepository {
 
     }
 
-    override fun getNotes(): Flow<List<Note>> {
-        TODO("Not yet implemented")
+    override fun getNotes(): Flow<RequestState<List<Note>>> {
+        return realm?.query<Note>()
+            ?.asFlow()?.map { result ->
+                RequestState.Success(result.list)
+            } ?: flowOf(RequestState.Error(("Realm is null")))
     }
 
-    override suspend fun getNoteById(id: Int): Note? {
-        TODO("Not yet implemented")
+    override suspend fun getNoteById(note: Note): Note? {
+        return realm?.query<Note>(query = "_id == $0", note._id)?.first()?.find()
     }
 
     override suspend fun insertNote(note: Note) {
-        TODO("Not yet implemented")
+        realm?.write { copyToRealm(note) }
     }
 
     override suspend fun deleteNote(note: Note) {
-        TODO("Not yet implemented")
+        realm?.write {
+            try {
+                val queriedTask = query<Note>(query = "_id == $0", note._id)
+                    .first()
+                    .find()
+                queriedTask?.let {
+                    findLatest(it)?.let { currentNote ->
+                        delete(currentNote)
+                    }
+                }
+            } catch (e: Exception) {
+                println(e)
+            }
+        }
     }
 }
