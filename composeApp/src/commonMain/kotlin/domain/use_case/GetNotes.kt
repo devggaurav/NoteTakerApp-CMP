@@ -17,33 +17,51 @@ import util.OrderType
 class GetNotes(private val repository: NotesRepository) {
 
 
-   operator fun invoke(
-       noteOrder: NoteOrder = NoteOrder.Date(OrderType.Descending)
-   ) : Flow<List<Note>> {
-       return repository.getNotes().map { notes ->
-           when(noteOrder.orderType){
-               is OrderType.Ascending -> {
-                   when(noteOrder){
-                       is NoteOrder.Title -> notes.getSuccessData().sortedBy { it.title.lowercase() }
-                       is NoteOrder.Date -> notes.getSuccessData().sortedBy { it.date }
-                       is NoteOrder.Color -> notes.getSuccessData().sortedBy { it.color }
-                   }
-               }
-               is OrderType.Descending -> {
-                   when(noteOrder){
-                       is NoteOrder.Title -> notes.getSuccessData().sortedByDescending { it.title.lowercase() }
-                       is NoteOrder.Date -> notes.getSuccessData().sortedByDescending { it.date }
-                       is NoteOrder.Color -> notes.getSuccessData().sortedByDescending { it.color }
-                   }
-               }
+    operator fun invoke(
+        noteOrder: NoteOrder = NoteOrder.Date(OrderType.Descending)
+    ): Flow<RequestState<List<Note>>> {
 
 
+        return repository.getNotes().map { notes ->
+            when (notes) {
+                is RequestState.Success -> {
+
+                    val sortedNotes = when (noteOrder.orderType) {
+                        is OrderType.Ascending -> {
+                            when (noteOrder) {
+                                is NoteOrder.Title -> notes.getSuccessData()
+                                    .sortedBy { it.title.lowercase() }
+
+                                is NoteOrder.Date -> notes.getSuccessData().sortedBy { it.date }
+                                is NoteOrder.Color -> notes.getSuccessData().sortedBy { it.color }
+                            }
+                        }
+
+                        is OrderType.Descending -> {
+                            when (noteOrder) {
+                                is NoteOrder.Title -> notes.getSuccessData()
+                                    .sortedByDescending { it.title.lowercase() }
+
+                                is NoteOrder.Date -> notes.getSuccessData()
+                                    .sortedByDescending { it.date }
+
+                                is NoteOrder.Color -> notes.getSuccessData()
+                                    .sortedByDescending { it.color }
+                            }
+                        }
+
+                    }
+                    RequestState.Success(sortedNotes)
+
+                }
+
+                is RequestState.Error -> RequestState.Error(notes.message)
+                RequestState.Idle -> RequestState.Idle
+                RequestState.Loading -> RequestState.Loading
+            }
+
+        }
 
 
-           }
-
-       }
-
-
-   }
+    }
 }
