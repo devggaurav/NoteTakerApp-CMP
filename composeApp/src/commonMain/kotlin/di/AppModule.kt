@@ -9,6 +9,7 @@ import domain.use_case.GetNotes
 import domain.use_case.NoteUseCases
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
+import presentation.NotesViewModel
 
 
 //
@@ -26,6 +27,9 @@ val appModule = module {
             getNote = GetNote(get()),
             deleteNote = DeleteNote(get())
         )
+    }
+    factory {
+        NotesViewModel(get())
     }
 }
 
