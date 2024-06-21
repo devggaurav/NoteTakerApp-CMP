@@ -1,5 +1,7 @@
 package domain.model
 
+import util.NoteOrder
+
 
 //
 // Created by Code For Android on 19/06/24.
@@ -7,8 +9,8 @@ package domain.model
 //
 
 sealed class NoteAction {
-     data class getNoteById(val note: Note) : NoteAction()
-     data class addNote(val note: Note) : NoteAction()
-     data class deleteNote(val note: Note) : NoteAction()
-
+    data class Order(val noteOrder: NoteOrder) : NoteAction()
+    data class DeleteNote(val note: Note) : NoteAction()
+    data object RestoreNote : NoteAction()
+    data object ToggleOrderSection : NoteAction()
 }
