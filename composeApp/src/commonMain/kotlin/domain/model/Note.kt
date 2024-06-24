@@ -19,13 +19,13 @@ import org.mongodb.kbson.ObjectId
 
 class Note : RealmObject {
 
-    val title: String = ""
-    val content: String = ""
-    val date: Long = 0
-    val color: Int = 0
+    var title: String = ""
+    var content: String = ""
+    var date: Long = 0
+    var color: Int = 0
 
     @PrimaryKey
-    val _id: ObjectId = ObjectId()
+    var _id: ObjectId = ObjectId()
 
     companion object {
         val noteColors = listOf(first, second, third, fourth, fifth)
