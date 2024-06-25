@@ -58,7 +58,18 @@ class NotesViewModel(
 
             NoteAction.RestoreNote -> {
                 screenModelScope.launch {
-                    noteUseCases.addNote(recentlyDeletedNote ?: return@launch)
+                    val newNote = Note()
+                    recentlyDeletedNote?.let { it ->
+                        newNote.apply {
+                            title = it.title
+                            content = it.content
+                            date = it.date
+                            color = it.color
+                        }
+
+                    }
+
+                    noteUseCases.addNote(newNote ?: return@launch)
                     recentlyDeletedNote = null
                 }
             }
