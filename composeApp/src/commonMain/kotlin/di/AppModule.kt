@@ -33,6 +33,8 @@ val appModule = module {
     }
     factory {
         NotesViewModel(get())
+    }
+    factory {
         AddEditViewModel(get())
     }
 }

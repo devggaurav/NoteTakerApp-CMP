@@ -38,8 +38,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
+import domain.model.Note
 import domain.model.NoteAction
 import kotlinx.coroutines.launch
+import presentation.add_edit_note.AddEditNoteScreen
 import presentation.homeComponent.NoteItem
 import presentation.homeComponent.OrderSection
 
@@ -53,7 +57,7 @@ class HomeScreen : Screen {
 
     @Composable
     override fun Content() {
-
+        val navigator = LocalNavigator.currentOrThrow
         val viewModel = getScreenModel<NotesViewModel>()
         val state = viewModel.state.value
         val scaffoldState = remember { SnackbarHostState() }
@@ -63,7 +67,7 @@ class HomeScreen : Screen {
             floatingActionButton = {
                 FloatingActionButton(
                     onClick = {
-
+                        navigator.push(AddEditNoteScreen(Note()))
                     },
                     containerColor = Color.Magenta
 
@@ -87,7 +91,9 @@ class HomeScreen : Screen {
                         style = MaterialTheme.typography.headlineLarge
                     )
                     IconButton(
-                        onClick = {},
+                        onClick = {
+                            viewModel.onAction(NoteAction.ToggleOrderSection)
+                        },
 
                         ) {
                         Icon(imageVector = Icons.Default.Edit, contentDescription = "Sort")
@@ -117,7 +123,7 @@ class HomeScreen : Screen {
                         NoteItem(
                             note = note,
                             modifier = Modifier.fillMaxWidth().clickable {
-
+                                navigator.push(AddEditNoteScreen(note))
                             },
                             onDeleteClick = {
                                 viewModel.onAction(NoteAction.DeleteNote(note))
