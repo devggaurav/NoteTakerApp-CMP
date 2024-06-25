@@ -10,6 +10,8 @@ import domain.use_case.NoteUseCases
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
+import kotlinx.datetime.Clock
+import kotlinx.datetime.LocalDateTime
 import org.mongodb.kbson.ObjectId
 
 
@@ -73,11 +75,68 @@ class AddEditViewModel(private val noteUseCases: NoteUseCases) : ScreenModel {
                 _noteColor.value = addEditNoteEvent.color
             }
 
-            is AddEditNoteEvent.ChangeContentFocus -> TODO()
-            is AddEditNoteEvent.ChangeTitleFocus -> TODO()
-            is AddEditNoteEvent.EnteredContent -> TODO()
-            is AddEditNoteEvent.EnteredTitle -> TODO()
-            AddEditNoteEvent.SaveNote -> TODO()
+            is AddEditNoteEvent.ChangeContentFocus -> {
+                _noteContent.value = _noteContent.value.copy(
+                    isHintVisible = !addEditNoteEvent.focusState.isFocused && _noteContent.value.text.isBlank()
+                )
+            }
+
+            is AddEditNoteEvent.ChangeTitleFocus -> {
+                _noteTitle.value = _noteTitle.value.copy(
+                    isHintVisible = !addEditNoteEvent.focusState.isFocused && _noteTitle.value.text.isBlank()
+                )
+            }
+
+            is AddEditNoteEvent.EnteredContent -> {
+                _noteContent.value = _noteContent.value.copy(
+                    text = addEditNoteEvent.value
+                )
+            }
+
+            is AddEditNoteEvent.EnteredTitle -> {
+                _noteTitle.value = _noteTitle.value.copy(
+                    text = addEditNoteEvent.value
+                )
+            }
+
+            AddEditNoteEvent.SaveNote -> {
+                screenModelScope.launch {
+                    try {
+                        currentNoteId?.let { noteId ->
+                            noteUseCases.updateNote(
+                                Note().apply {
+                                    title = noteTitle.value.text
+                                    content = noteContent.value.text
+                                    color = noteColor.value
+                                    date = Clock.System.now().toEpochMilliseconds()
+                                    _id = noteId
+                                }
+                            )
+
+
+                        } ?: noteUseCases.addNote(
+                            Note().apply {
+                                title = noteTitle.value.text
+                                content = noteContent.value.text
+                                color = noteColor.value
+                                date = Clock.System.now().toEpochMilliseconds()
+                            }
+
+                        )
+
+                        _eventFlow.emit(UiEvent.SaveNote)
+                    } catch (ex: Exception) {
+                        _eventFlow.emit(
+                            UiEvent.ShowSnackBar(
+                                message = ex.message ?: "Couldn't save note"
+                            )
+                        )
+                    }
+
+                }
+
+            }
+
         }
 
 

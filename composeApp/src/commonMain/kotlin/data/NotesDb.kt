@@ -54,6 +54,27 @@ class NotesDb : NotesRepository {
         realm?.write { copyToRealm(note) }
     }
 
+    override suspend fun updateNote(note: Note) {
+        realm?.write {
+            try {
+                val queriedTask = query<Note>("_id == $0", note._id)
+                    .first()
+                    .find()
+                queriedTask?.let {
+                    findLatest(it)?.let { savedNote ->
+                        savedNote.title = note.title
+                        savedNote.content = note.content
+                        savedNote.date = note.date
+                        savedNote.color = note.color
+                    }
+                }
+            } catch (e: Exception) {
+                println(e)
+            }
+        }
+
+    }
+
     override suspend fun deleteNote(note: Note) {
         realm?.write {
             try {
