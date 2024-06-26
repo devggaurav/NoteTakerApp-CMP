@@ -2,6 +2,13 @@
 A Notes Taker Application in compose multiplatform, KMP 
 
 
+## Platforms
+![](https://img.shields.io/badge/Android-black.svg?style=for-the-badge&logo=android) | ![](https://img.shields.io/badge/iOS-black.svg?style=for-the-badge&logo=apple) 
+:----: | :----: 
+✅ | ✅ 
+
+
+
 
 
 ***IPHONE***
