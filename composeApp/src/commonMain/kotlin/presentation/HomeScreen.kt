@@ -35,6 +35,9 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
@@ -42,10 +45,15 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import domain.model.Note
 import domain.model.NoteAction
+import kotlinproject.composeapp.generated.resources.Mukta_Bold
+import kotlinproject.composeapp.generated.resources.Res
 import kotlinx.coroutines.launch
 import presentation.add_edit_note.AddEditNoteScreen
 import presentation.homeComponent.NoteItem
 import presentation.homeComponent.OrderSection
+import ui.theme.onSecondaryContainerDark
+import ui.theme.tertiaryContainerDarkMediumContrast
+import util.getFonts
 
 
 //
@@ -69,17 +77,23 @@ class HomeScreen : Screen {
                     onClick = {
                         navigator.push(AddEditNoteScreen(Note()))
                     },
-                    containerColor = Color.Magenta
+                    containerColor = tertiaryContainerDarkMediumContrast
 
                 ) {
                     Icon(imageVector = Icons.Default.Add, contentDescription = "Add Note")
                 }
             },
-            snackbarHost = { SnackbarHost(hostState = scaffoldState) }
+            snackbarHost = { SnackbarHost(hostState = scaffoldState) },
+            containerColor = onSecondaryContainerDark
         ) { paddingValues ->
 
             Column(
-                modifier = Modifier.fillMaxSize().padding(paddingValues)
+                modifier = Modifier.fillMaxSize().padding(
+                    top = paddingValues.calculateTopPadding(),
+                    start = 10.dp,
+                    end = 10.dp,
+                    bottom = paddingValues.calculateBottomPadding()
+                )
             ) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -87,8 +101,10 @@ class HomeScreen : Screen {
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = "Your Note",
-                        style = MaterialTheme.typography.headlineLarge
+                        text = "Notes",
+                        style = MaterialTheme.typography.headlineLarge,
+                        fontWeight = FontWeight.Bold,
+                        fontFamily = getFonts(Res.font.Mukta_Bold)
                     )
                     IconButton(
                         onClick = {

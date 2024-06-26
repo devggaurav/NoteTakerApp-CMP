@@ -26,6 +26,11 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import domain.model.Note
+import kotlinproject.composeapp.generated.resources.Kalam_Regular
+import kotlinproject.composeapp.generated.resources.PTSans_Bold
+import kotlinproject.composeapp.generated.resources.PTSans_Italic
+import kotlinproject.composeapp.generated.resources.Res
+import util.getFonts
 
 
 //
@@ -78,10 +83,11 @@ fun NoteItem(
         ) {
             Text(
                 text = note.title,
-                style = MaterialTheme.typography.headlineLarge,
+                style = MaterialTheme.typography.headlineMedium,
                 color = MaterialTheme.colorScheme.onSurface,
                 maxLines = 1,
-                overflow = TextOverflow.Ellipsis
+                overflow = TextOverflow.Ellipsis,
+                fontFamily = getFonts(Res.font.PTSans_Italic)
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
@@ -89,7 +95,8 @@ fun NoteItem(
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurface,
                 maxLines = 10,
-                overflow = TextOverflow.Ellipsis
+                overflow = TextOverflow.Ellipsis,
+                fontFamily = getFonts(Res.font.Kalam_Regular)
             )
 
         }
