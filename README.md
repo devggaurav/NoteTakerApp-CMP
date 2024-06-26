@@ -7,7 +7,7 @@ A Notes Taker Application in compose multiplatform, KMP
 ***IPHONE***
 <img src="https://github.com/devggaurav/NoteTakerApp-CMP/assets/42926809/a203a973-c1b0-47f0-a875-5a44f56adadb" height="550px">
 <img src="https://github.com/devggaurav/NoteTakerApp-CMP/assets/42926809/bdb394c0-f357-40e3-9efc-136eec4c4492" height="550px">
-<img src="https://github.com/devggaurav/NoteTakerApp-CMP/assets/42926809/c75e9894-50b5-4749-8d3e-97a97dd37a5f" height="550px">
+
 
 
 
