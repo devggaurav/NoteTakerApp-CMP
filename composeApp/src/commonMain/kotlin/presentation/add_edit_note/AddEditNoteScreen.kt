@@ -41,6 +41,7 @@ import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import domain.model.Note
+import getPlatform
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import presentation.NotesViewModel
@@ -110,10 +111,17 @@ data class AddEditNoteScreen(val note: Note?) : Screen {
             snackbarHost = { SnackbarHost(scaffoldState) }
 
 
-        ) {
+        ) { paddingValues ->
+            val topPadding =
+                if (getPlatform().isAndroid) paddingValues.calculateTopPadding() + 20.dp else paddingValues.calculateTopPadding()
             Column(
                 modifier = Modifier.fillMaxSize().background(noteBackGroundAnimatable.value)
-                    .padding(16.dp)
+                    .padding(
+                        top = topPadding,
+                        bottom = paddingValues.calculateBottomPadding(),
+                        start = 10.dp,
+                        end = 10.dp
+                    )
             ) {
 
                 Row(
@@ -178,7 +186,7 @@ data class AddEditNoteScreen(val note: Note?) : Screen {
                         viewModel.onEvent(AddEditNoteEvent.ChangeContentFocus(it))
                     },
                     isHintVisible = contentState.isHintVisible,
-                    textStyle = MaterialTheme.typography.bodyMedium,
+                    textStyle = MaterialTheme.typography.bodyLarge,
                     modifier = Modifier.fillMaxWidth()
 
                 )

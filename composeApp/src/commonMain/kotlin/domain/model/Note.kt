@@ -9,7 +9,6 @@ import domain.model.colorList.third
 import io.realm.kotlin.types.RealmObject
 import io.realm.kotlin.types.annotations.PrimaryKey
 import org.mongodb.kbson.ObjectId
-import ui.theme.errorContainerDarkMediumContrast
 import ui.theme.errorDarkMediumContrast
 import ui.theme.inversePrimaryLight
 import ui.theme.outlineDarkHighContrast
@@ -42,11 +41,11 @@ class InvalidNoteException(message: String) : Exception(message)
 
 object colorList {
 
-    val first: Color = inversePrimaryLight
-    val second: Color = tertiaryDark
-    val third: Color = errorDarkMediumContrast
-    val fourth: Color = outlineDarkHighContrast
-    val fifth: Color = errorContainerDarkMediumContrast
+    val first: Color = Color(0xFFb8c0ff)
+    val second: Color = Color(0xFFfeeafa)
+    val third: Color = Color(0xFFe5989b)
+    val fourth: Color = Color(0xFFffcdb2)
+    val fifth: Color = Color(0xFF66A5AD)
 
 
 }
