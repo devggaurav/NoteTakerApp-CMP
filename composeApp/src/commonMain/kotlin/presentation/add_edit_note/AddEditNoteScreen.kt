@@ -59,9 +59,7 @@ data class AddEditNoteScreen(val note: Note?) : Screen {
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
         val viewModel = getScreenModel<AddEditViewModel>()
-        note?.let { it ->
-            viewModel.getNote(it)
-        }
+
 
         val noteColor = note?.color ?: viewModel.noteColor.value
         val scaffoldState = remember { SnackbarHostState() }
@@ -74,6 +72,12 @@ data class AddEditNoteScreen(val note: Note?) : Screen {
             Animatable(
                 Color(if (noteColor != -1) noteColor else viewModel.noteColor.value)
             )
+        }
+
+        LaunchedEffect(note){
+            note?.let { it ->
+                viewModel.getNote(it)
+            }
         }
 
         LaunchedEffect(key1 = true) {
@@ -176,10 +180,12 @@ data class AddEditNoteScreen(val note: Note?) : Screen {
 
                 )
                 Spacer(modifier = Modifier.height(16.dp))
+
                 TransparentHintTextField(
                     text = contentState.text,
                     hint = contentState.hint,
-                    onValueChange = {
+                    onValueChange = { it ->
+
                         viewModel.onEvent(AddEditNoteEvent.EnteredContent(it))
                     },
                     onFocusChange = {

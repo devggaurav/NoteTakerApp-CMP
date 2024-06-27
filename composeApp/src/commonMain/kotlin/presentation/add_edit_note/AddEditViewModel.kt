@@ -89,13 +89,16 @@ class AddEditViewModel(private val noteUseCases: NoteUseCases) : ScreenModel {
 
             is AddEditNoteEvent.EnteredContent -> {
                 _noteContent.value = _noteContent.value.copy(
-                    text = addEditNoteEvent.value
-                )
+                    text = addEditNoteEvent.value,
+
+                    )
+
             }
 
             is AddEditNoteEvent.EnteredTitle -> {
                 _noteTitle.value = _noteTitle.value.copy(
-                    text = addEditNoteEvent.value
+                    text = addEditNoteEvent.value,
+                    isHintVisible = false
                 )
             }
 
